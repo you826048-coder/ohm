@@ -1,61 +1,279 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-<meta charset="UTF-8">
-<title>สถิติจำนวนนักเรียน</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <title>แผนกอาหารและโภชนาการ | วิทยาลัยอาชีวศึกษา</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root{
+      --blue:#0b5ed7;
+      --blue2:#1f86ff;
+      --bg:#f3f7ff;
+      --card:#ffffff;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: "Segoe UI", Tahoma, sans-serif; }
+    body { background: var(--bg); color: #1f5be6; line-height: 1.6; }
 
-<style>
-body{
-    margin:0;
-    background:#f4f6f9;
-    font-family: Arial, sans-serif;
+    header {
+      background: linear-gradient(135deg, var(--blue), var(--blue2));
+      color: #fff; padding: 16px;
+      box-shadow: 0 6px 14px rgba(0,0,0,.15);
+    }
+    .topbar {
+      max-width: 1100px; margin: auto;
+      display: grid; grid-template-columns: auto 1fr auto; gap: 12px;
+      align-items: center;
+    }
+    .logo {
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #fff; padding: 6px;
+      display: grid; place-items: center;
+    }
+    .logo img { width: 100%; height: 100%; object-fit: contain; }
+
+    .title h1 { font-size: clamp(18px, 2.5vw, 26px); }
+    .title p { opacity: .9; font-size: clamp(12px, 2vw, 14px); }
+
+    /* ปุ่มสามขีด */
+    .hamburger{
+      display:none;
+      background:transparent; border:0; color:#fff;
+      font-size:28px; cursor:pointer;
+      position: relative; z-index: 9999;
+      pointer-events: auto;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+
+    nav { max-width: 1100px; margin: 10px auto 0; }
+    nav ul { list-style: none; display: flex; gap: 10px; flex-wrap: wrap; }
+    nav a {
+      color: #fff; text-decoration: none; font-weight: 600;
+      padding: 8px 12px; border-radius: 10px; display:inline-block;
+    }
+    nav a:hover { background: rgba(255,255,255,.2); }
+
+    .container { max-width: 1100px; margin: 20px auto; padding: 0 16px; }
+
+    .hero {
+      background: var(--card); border-radius: 16px; padding: 20px;
+      display: grid; grid-template-columns: 1.2fr 1fr; gap: 20px;
+      box-shadow: 0 10px 20px rgba(0,0,0,.08);
+      align-items: center;
+    }
+    .hero h2 { color: var(--blue); margin-bottom: 8px; font-size: clamp(18px, 2.5vw, 24px); }
+    .hero p { line-height: 1.75; font-size: clamp(14px, 2.2vw, 16px); }
+    .hero img{
+      width:100%; height:auto; max-height:360px; object-fit:cover; border-radius:12px;
+    }
+
+    .cta {
+      display: inline-block; margin-top: 12px;
+      background: var(--blue); color: #fff; text-decoration: none;
+      padding: 10px 16px; border-radius: 10px; font-weight: 600;
+      margin-right: 8px;
+    }
+    .cta.secondary { background:#fff; color:var(--blue); border:2px solid var(--blue); }
+
+    section { margin-top: 36px; }
+    section h2 {
+      color: var(--blue); margin-bottom: 12px;
+      border-left: 6px solid var(--blue); padding-left: 10px;
+      font-size: clamp(18px, 2.5vw, 22px);
+    }
+
+    .cards {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+    }
+    .card {
+      background: #fff; border-radius: 14px; padding: 14px;
+      box-shadow: 0 8px 16px rgba(0,0,0,.08);
+      font-size: clamp(14px, 2.2vw, 16px);
+    }
+
+    footer {
+      margin-top: 40px; background: var(--blue); color: #eaf1ff;
+      text-align: center; padding: 14px;
+      font-size: clamp(12px, 2vw, 14px);
+    }
+    .cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
 }
 
-/* จัดให้อยู่กลางทั้งแนวตั้งและแนวนอน */
-#chart{
-    min-height:100vh;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-}
-
-/* กล่อง */
 .card{
-    width:90%;
-    max-width:900px;
-    background:#fff;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 10px 30px rgba(0,0,0,0.1);
-    display:flex;
-    justify-content:center;   /* สำคัญ */
+  background:#fff;
+  border-radius:14px;
+  padding:15px;
+  text-align:center;
+  box-shadow:0 8px 16px rgba(0,0,0,.08);
 }
 
-/* iframe จัดกลาง */
-iframe{
-    width:100%;
-    max-width:800px;
-    height:450px;
-    border:none;
+.card img{
+  width:120px;
+  height:120px;
+  object-fit:cover;
+  border-radius:50%;
+  margin-bottom:10px;
 }
-</style>
+
+       /* 📱 มือถือ */
+    @media (max-width: 768px){
+      .hamburger{ display:block; }
+
+      nav{ display:none; }
+      nav.active{ display:block; }
+
+      nav ul{
+        flex-direction:column;
+        background: rgba(255,255,255,.12);
+        padding:10px; border-radius:12px;
+      }
+      nav a{ width:100%; text-align:center; }
+
+      .hero{ grid-template-columns:1fr; padding:16px; }
+      .cta{ width:100%; text-align:center; margin-right:0; }
+    }
+  </style>
 </head>
-
 <body>
 
-<section id="chart">
-<h2>สถิติจำนวนนักเรียน</h2>
+<header>
+  <div class="topbar">
+    <div class="logo">
+      <img src="logo.png" alt="ตราอาชีวศึกษา">
+    </div>
+    <div class="title">
+      <h1>แผนกอาหารและโภชนาการ</h1>
+      <p>วิทยาลัยการอาชีพหลวงประธานราษฎร์นิกร</p>
+    </div>
+    <button class="hamburger" onclick="toggleMenu()" aria-label="เมนู">☰</button>
+  </div>
+
+  <nav id="mainNav">
+    <ul>
+      <li><a href="#home">หน้าแรก</a></li>
+      <li><a href="#about">เกี่ยวกับแผนก</a></li>
+      <li><a href="#menu">เมนูอาหาร</a></li>
+      <li><a href="#study">บุคลากร</a></li>
+      <li><a href="#course">หลักสูตร</a></li>
+      <li><a href="#career">อาชีพหลังจบ</a></li>
+      <li><a href="https://www.lpt.ac.th/new/รับสมัครนักเรียน-นักศึกษาใหม่-รอบโควตา-ประจำปีการศึกษา-2569" target="_blank">สมัครเรียน</a></li>
+      <li><a href="https://www.lpt.ac.th/content-us" target="_blank">ติดต่อเรา</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="container" id="home">
+  <section class="hero">
+    <div>
+      <h2>มาเรียนสายอาชีพ สร้างอาชีพได้จริง</h2>
+      <p>
+        แผนกอาหารและโภชนาการ เหมาะสำหรับผู้ที่สนใจด้านการทำอาหาร การบริการอาหาร โรงแรม และร้านอาหาร
+        รวมถึงโภชนาการเพื่อสุขภาพ เรียนรู้ทั้งภาคทฤษฎีควบคู่กับการฝึกปฏิบัติจริงในห้องปฏิบัติการที่ทันสมัย
+        พร้อมฝึกประสบการณ์จากสถานประกอบการจริง
+      </p>
+      <a class="cta" href="https://www.lpt.ac.th/new/รับสมัครนักเรียน-นักศึกษาใหม่-รอบโควตา-ประจำปีการศึกษา-2569" target="_blank">สมัครเรียน</a>
+      <a class="cta secondary" href="https://www.lpt.ac.th/index.php" target="_blank">เข้าสู่เว็บไซต์วิทยาลัย</a>
+    </div>
+    <img src="1414.jpg" alt="เมนูอาหาร">
+  </section>
+</div>
+  <!-- 🔹 บุคลากร -->
+<section id="study">
+<h2>บุคลากร</h2>
+<div class="cards">
 
 <div class="card">
-<iframe 
-src="">
-</iframe>
+<img src="ChatGPT Image Feb 27, 2026, 05_59_04 PM.png">
+<h3>นางสาวพันธ์ทิพย์ ช่วยประสม</h3>
+<p>ครูแผนกอาหารและโภชนาการ</p>
 </div>
 
+<div class="card">
+<img src="ChatGPT Image Feb 27, 2026, 05_56_27 PM.png">
+<h3>นางนวกมล ปราบเสร็จ</h3>
+<p>ครูแผนกอาหารและโภชนาการ</p>
+</div>
+
+<div class="card">
+<img src="ChatGPT Image 27 ก.พ. 2569 17_43_56.png">
+<h3>นางสาวศรุดา เกื้อสุวรรณ</h3>
+<p>ครูแผนกอาหารและโภชนาการ</p>
+</div>
+
+<div class="card">
+<img src="ChatGPT Image 27 ก.พ. 2569 17_44_05.png">
+<h3>นางสาวกชทัศ อยู่มะนะ</h3>
+<p>ครูแผนกอาหารและโภชนาการ</p>
+</div>
+
+</div>
 </section>
+
+<!-- 🔹 กราฟ -->
+<section id="chart">
+<h2>สถิติจำนวนนักเรียน</h2>
+<div class="card">
+<iframe 
+width="100%" 
+height="400"
+frameborder="0"
+src="https://docs.google.com/spreadsheets/d/e/2PACX-1vQNFsU03MpxFJTyTP5C25Y24D4yPyRkYd23dqcaPOKkSMIFKrX5FoeWbRAnHhV0u-i8gRKg-SeIy-Os/pubchart?oid=349568764&format=interactive">
+</iframe>
+</div>
+</section>
+
+  <section id="menu">
+    <h2>ตัวอย่างเมนูอาหาร</h2>
+    <div class="cards">
+      <div class="card"><h3>🍛 ข้าวผัด</h3><p>เมนูพื้นฐาน ฝึกทักษะการผัด</p></div>
+      <div class="card"><h3>🍲 ต้มยำกุ้ง</h3><p>อาหารไทยยอดนิยม</p></div>
+      <div class="card"><h3>🥗 สลัดผัก</h3><p>เมนูสุขภาพ</p></div>
+      <div class="card"><h3>🍰 เค้ก</h3><p>ฝึกทำเบเกอรี่</p></div>
+    </div>
+  </section>
+
+
+
+  <section id="course">
+    <h2>หลักสูตรที่เปิดสอน</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>📘 ปวช. (ประกาศนียบัตรวิชาชีพ)</h3>
+        <p>สำหรับผู้จบ ม.3 เรียนพื้นฐานอาหารและโภชนาการ</p>
+      </div>
+      <div class="card">
+        <h3>📗 ปวส. (ประกาศนียบัตรวิชาชีพชั้นสูง)</h3>
+        <p>สำหรับผู้จบ ปวช. หรือ ม.6 เรียนเชิงลึกและการจัดการร้านอาหาร</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="career">
+    <h2>อาชีพหลังจบ</h2>
+    <ul class="list">
+      <li>พ่อครัว / แม่ครัว</li>
+      <li>ผู้ช่วยเชฟ</li>
+      <li>พนักงานโรงแรม / ร้านอาหาร</li>
+      <li>เปิดร้านอาหาร / เบเกอรี่</li>
+      <li>ศึกษาต่อระดับสูงขึ้น</li>
+    </ul>
+  </section>
+<script>
+  function toggleMenu(){
+    const nav = document.getElementById('mainNav');
+    if(!nav) return;
+    nav.classList.toggle('active');
+  }
+</script>
+</div>
+
+<footer>
+  <p>© 2026 เว็บไซต์แนะนำแผนก วิทยาลัยการอาชีพหลวงประธานราษฎร์นิกร</p>
+</footer>
 
 </body>
 </html>
